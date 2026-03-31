@@ -3,115 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Nova Guia Personalizada</title>
+    <title>Minha Nova Guia</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text: #202124;
+            --text-secondary: #5f6368;
+            --border: #dadce0;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Google Sans', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text);
+            min-height: 100vh;
             padding: 20px;
             background-size: cover;
             background-position: center;
-            color: #fff;
-            min-height: 100vh;
+            transition: background-image 0.4s ease;
         }
-        .search-box {
+
+        .search-container {
             text-align: center;
-            margin-bottom: 30px;
-        }
-        .search-box input {
-            width: 80%;
+            margin: 40px auto 30px;
             max-width: 600px;
-            padding: 15px;
-            font-size: 18px;
-            border: none;
-            border-radius: 25px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
+        #search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 16px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 32px;
+            box-shadow: 0 2px 10px var(--shadow);
+            outline: none;
+        }
+
         .shortcuts {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
             justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
         }
+
         .shortcut {
+            width: 96px;
             text-align: center;
-            width: 100px;
+            cursor: pointer;
+            position: relative;
         }
-        .shortcut img {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+        .shortcut-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            box-shadow: 0 2px 6px var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
-        .shortcut a {
-            text-decoration: none;
-            color: #fff;
+
+        .shortcut-icon img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .shortcut-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 96px;
+        }
+
+        .shortcut-actions {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            display: none;
+            background: #fff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px var(--shadow);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: #70757a;
+        }
+
+        .shortcut:hover .shortcut-actions {
+            display: flex;
+        }
+
+        .btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radiuspx;
+            padding: 8px 16px;
             font-size: 14px;
-            display: block;
-            margin-top: 5px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px var(--shadow);
+            transition: all 0.2s;
         }
-        .background-settings {
+
+        .btn:hover {
+            background: #f8f9fa;
+            border-color: #cfd5db;
+        }
+
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #1557d1;
+        }
+
+        /* Popup */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .popup h3 {
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+ .popup input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Background Gallery */
+        .bg-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .bg-option {
+            height: 60px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bg-option.selected {
+            border-color: #1a73e8;
+        }
+
+        .footer {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .background-settings:hover {
-            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            gap: 12px;
         }
     </style>
 </head>
-<body style="background-image: url('https://via.placeholder.com/1920x1080');">
-    <!-- Campo de Pesquisa -->
-    <div class="search-box">
-        <form action="https://www.google.com/search" method="get" target="_blank">
-            <input type="text" name="q" placeholder="Pesquisar no Google..." required>
-        </form>
+<body>
+    <div class="search-container">
+        <input type="text" id="search-box" placeholder="Pesquisar no Google..." autocomplete="off">
     </div>
 
-    <!-- Atalhos Personalizados -->
-    <div class="shortcuts">
-        <div class="shortcut">
-            <a href="https://www.google.com" target="_blank">
-                <img src="https://www.google.com/favicon.ico" alt="Google">
-                Google
-            </a>
-        </div>
-        <div class="shortcut">
-            <a href="https://www.youtube.com" target="_blank">
-                <img src="https://www.youtube.com/favicon.ico" alt="YouTube">
-                YouTube
-            </a>
-        </div>
-        <div class="shortcut">
-            <a href="https://www.wikipedia.org" target="_blank">
-                <img src="https://www.wikipedia.org/static/favicon/wikipedia.ico" alt="Wikipedia">
-                Wikipedia
-            </a>
-        </div>
-        <!-- Adicione mais atalhos aqui -->
+    <div class="shortcuts" id="shortcuts-grid">
+        <!--hos serão inseridos aqui pelo JS -->
     </div>
 
-    <!-- Botão para Alterar Background -->
-    <div class="background-settings" onclick="changeBackground()">
-        Alterar Fundo
+    <!-- Botões rápidos -->
+    <div class="footer">
+        <button class="btn" id="add-shortcut-btn">➕ Novo Atalho</button>
+        <button class="btn" id="change-bg-btn">🖼️ Alterar Fundo</button>
+    </div>
+
+    <!-- Popup para novo atalho -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <h3>Criar Novo Atalho</h3>
+            <input type="text" id="shortcut-url" placeholder="URL do site (ex: https://google.com)" required>
+            <input type="text" id="shortcut-name" placeholder="Nome do atalho (ex: Google)">
+            <div class="popup-buttons">
+                <button class="btn" id="cancel-popup">Cancelar</button>
+                <button class="btn btn-primary" id="save-shortcut">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup para fundo -->
+    <div class="popup" id="bg-popup">
+        <div class="popup-content">
+            <h3>Escolha um fundo</h3>
+            <div class="bg-gallery" id="bg-gallery">
+                <!-- Será preenchido pelo JS -->
+            </div>
+            <div class="popup-buttons">
+                <button class="btn" id="close-bg-popup">Fechar</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Função para alterar o plano de fundo
-        function changeBackground() {
-            const backgrounds = [
-                'https://via.placeholder.com/1920x1080/FF5733/FFFFFF',
-                'https://via.placeholder.com/1920x1080/33FF57/FFFFFF',
-                'https://via.placeholder.com/1920x1080/3357FF/FFFFFF',
-                'https://via.placeholder.com/1920x1080/F3FF33/FFFFFF'
-            ];
-            const randomIndex = Math.floor(Math.random() * backgrounds.length);
-            document.body.style.backgroundImage = `url('${backgrounds[randomIndex]}')`;
+        // Configurações iniciais
+        const SHORTCUTS_KEY = 'customShort';
+        const BACKGROUND_KEY = 'customBackground';
+
+        // Fundos pré-definidos (você pode adicionar mais)
+        const backgrounds = [
+            'https://images.unsplash.com/photo-1506929419905-65e8ce723047?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1470071459050-6074d7ab84d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1469431125347-8be8c90a3fdc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1519681393545-879af31127c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1507842217343-583bb5270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1501854100457-397001948883?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+        ];
+
+        //
+        const searchBox = document.getElementById('search-box');
+        const shortcutsGrid = document.getElementById('shortcuts-grid');
+        const addShortcutBtn = document.getElementById('add-shortcut-btn');
+        const changeBgBtn = document.getElementById('change-bg-btn');
+        const popup = document.getElementById('popup');
+        const bgPopup = document.getElementById('bg-popup');
+        const cancelPopup = document.getElementById('cancel-popup');
+        const saveShortcut = document.getElementById('save-shortcut');
+        const shortcutUrl = document.getElementById('shortcut-url');
+        const shortcutName = document.getElementById('shortcut-name');
+        const closeBgPopup = document.getElementById('close-bg-popup');
+        const bgGallery = document.getElementById('bg-gallery');
+
+        // Carregar configurações do localStorage
+        let shortcuts = JSON.parse(localStorage.getItem(SHORTCUTS_KEY)) || [];
+        let currentBackground = localStorage.getItem(BACKGROUND_KEY) || '';
+
+        // Definir fundo inicial
+        if (currentBackground) {
+            document.body.style.backgroundImage = `url('${currentBackground}')`;
+        } else {
+            // Se nenhum fundo salvo, use o primeiro da lista
+            document.body.style.backgroundImage = `url('${backgrounds[0]}')`;
+            localStorage.setItem(BACKGROUND_KEY, backgrounds[0]);
         }
+
+        // Inicializar
+        renderShortcuts();
+        renderBackgroundGallery();
+
+        // Funções principais
+        function renderShortcuts() {
+            shortcutsGrid.innerHTML = '';
+            shortcuts.forEach((sc, index) => {
+                const shortcutEl = document.createElement('div');
+                shortcutEl.className = 'shortcut';
+                shortcutEl.innerHTML = `
+                    <div class="shortcut-icon">
+                        <img src="${getFavicon(sc.url)}" alt="${sc.name}" onerror="this.src='https://www.google.com/s2/favicons?domain=${new URL(sc.url).hostname}&sz=64'">
+                    </div>
+                    <div class="shortcut-name">${sc.name}</div>
+                    <div class="shortcut-actions" data-index="${index}">×</div>
+                `;
+                shortcutsGrid.appendChild(shortcutEl);
+
+                // Evento de clique no atalho
+                shortcutEl.querySelector('.shortcut-icon').addEventListener('click', () => {
+                    window.open(sc.url, '_blank');
+                });
+
+                // Evento de clique no "×"
+                shortcutEl.querySelector('.shortcut-actions').addEventListener('click', (e) => {
+                    const idx = parseInt(e.target.dataset.index);
+                    shortcuts.splice(idx, 1);
+                    localStorage.setItem(SHORTCUTS_KEY, JSON.stringify(shortcuts));
+                    renderShortcuts();
+                });
+            });
+        }
+
+        function getFavicon(url) {
+            try {
+                const domain = new URL(url).hostname;
+                return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+            } catch {
+                return 'https://www.google.com/s2/favicons?domain=example.com&sz=64';
+            }
+        }
+
+        function renderBackgroundGallery() {
+            bgGallery.innerHTML = '';
+            backgrounds.forEach((bg, i) => {
+                const option = document.createElement('div');
+                option.className = 'bg-option';
+                option.style.backgroundImage = `url('${bg}')`;
+                option.dataset.bg = bg;
+                if (bg === currentBackground) {
+                    option.classList.add('selected');
+                }
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.bg-option').forEach(el => el.classList.remove('selected'));
+                    option.classList.add('selected');
+                    currentBackground = bg;
+                    document.body.style.backgroundImage = `url('${bg}')`;
+                    localStorage.setItem(BACKGROUND_KEY, bg);
+                });
+                bgGallery.appendChild(option);
+            });
+        }
+
+        // Eventos
+        addShortcutBtn.addEventListener('click', () => {
+            popup.style.display = 'flex';
+            shortcutUrl.value = '';
+            shortcutName.value = '';
+            shortcutUrl.focus();
+        });
+
+        cancelPopup.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        saveShortcut.addEventListener('click', () => {
+            const url = shortcutUrl.value.trim();
+            const name = shortcutName.value.trim();
+            if (!url || !name) return;
+
+            shortcuts.push({ url, name });
+            localStorage.setItem(SHORTCUTS_KEY, JSON.stringify(shortcuts));
+            renderShortcuts();
+            popup.style.display = 'none';
+        });
+
+        changeBgBtn.addEventListener('click', () => {
+            bgPopup.style.display = 'flex';
+        });
+
+        closeBgPopup.addEventListener('click', () => {
+            bgPopup.style.display = 'none';
+        });
+
+        // Pesquisa no Google
+        searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchBox.value.trim();
+                if (query) {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                }
+            }
+        });
+
+        // Fechar popups ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (e.target === popup) popup.style.display = 'none';
+            if (e.target === bgPopup) bgPopup.style.display = 'none';
+        });
     </script>
 </body>
+</html>
 </html>
